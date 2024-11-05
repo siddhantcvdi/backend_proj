@@ -2,6 +2,12 @@ import mongoose, {Schema} from "mongoose";
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 
+/*
+    Basic User Schema
+    Each field can be given detailed properties 
+    Such as type, requirement etc.
+*/
+
 const userSchema = new Schema({
     username: {
         type: String,
@@ -9,7 +15,11 @@ const userSchema = new Schema({
         unique: true,
         lowercase: true,
         trim: true,
-        index: true
+        index: true //Indexing is true to optimize searching in mongoDB, 
+        // Don't index every field, this will cause optimization problems
+
+        // Do more research on this...
+
     },
     email: {
         type: String,
@@ -44,20 +54,31 @@ const userSchema = new Schema({
 
 })
 
+/*
+    .pre is executed before "saving" the password in mogoDB
+    can be used for other things by chnaging the parameters of function
+*/
+
 userSchema.pre("save",async function(next){
     if(this.isModified('password')){
         this.password = bcrypt.hash(this.password, 10)
-        next()
+        next() //Go to the next middleware function after the execution
     }
     next()
 })
+
+
+// We can add fucntions to userSchema in the already provided methods object
 
 userSchema.methods.isPasswordCorrect = async function(password){
     return await bcrypt.compare(password, this.password)
 }
 
+// Do research on difference between access token and refresh token
+
 userSchema.methods.generateAccessToken = function(){
     return jwt.sign(
+        // This is all the payload
         {
             _id: this._id,
             email: this.email,

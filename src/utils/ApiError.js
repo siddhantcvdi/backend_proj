@@ -1,3 +1,6 @@
+
+// Provides structure to the api error response, so that it has the same structure everywhere, providing consistency in codebase
+
 class ApiError extends Error{
     constructor(
         statusCode, 
