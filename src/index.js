@@ -8,8 +8,7 @@ connectDB()
     app.listen(process.env.PORT || 4200, ()=>{
         console.log("Server Running!!!");
     })
-})
-.catch((err)=>{
+}).catch((err)=>{
     console.log("Error in starting app", err);
     
 })
