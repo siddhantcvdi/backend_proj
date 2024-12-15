@@ -6,8 +6,8 @@ const videoSchema =  new Schema({
         type: String,
         required: true,
     },
-    thumnail: {
-        type: String, // Everyhting is accessed using cloudinary,  which provides a string for the file
+    thumbnail: {
+        type: String, // Everyhthing is accessed using cloudinary,  which provides a string for the file
         required: true
     },
     title: {
