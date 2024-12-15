@@ -61,12 +61,12 @@ const userSchema = new Schema({
 
 userSchema.pre("save",async function(next){
     if(this.isModified('password')){
-        this.password = bcrypt.hash(this.password, 10)
+        this.password = await bcrypt.hash(this.password, 10)
     }
     next() //Go to the next middleware function after the execution
 })
 
-// We can add fucntions to userSchema in the already provided methods object
+// We can add functions to userSchema in the already provided methods object
 userSchema.methods.isPasswordCorrect = async function(password){
     return await bcrypt.compare(password, this.password)
 }
