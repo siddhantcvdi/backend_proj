@@ -10,7 +10,7 @@ app.use(cors({
 }))
 
 app.use(express.json({
-    limt: "16kb"
+    limit: "16kb"
 }))
 
 app.use(express.urlencoded({

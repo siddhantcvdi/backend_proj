@@ -90,18 +90,19 @@ const loginUser = asyncHandler(async (req, res) => {
     Compare passwords
     Generate and return tokens using cookies
      */
+    // console.log(req.headers);
     const {email, username, password} = req.body
-    if([email, username, password].some((field) => (field.trim() === "" || field === undefined))){
+    if([email, username, password].some((field) => (field?.trim() === "" || field === undefined))){
         throw new ApiError(400, "Enter Username and Password")
     }
 
     const user = await User.findOne({$or:[{email}, {username}]})
-    console.log(user);
+    console.log("User ->",user);
     if(!user){
         throw new ApiError(404, "User not found");
     }
 
-    const isPasswordValid  = await user.isPasswordCorrect();
+    const isPasswordValid  = await user.isPasswordCorrect(password);
     if(!isPasswordValid){
         throw new ApiError(404, "Invalid User Credentials");
     }
@@ -139,7 +140,7 @@ const logoutUser = asyncHandler(async (req, res) => {
             new: true
         }
     )
-    console.log("Logged Out User, ", loggedOutUser);
+    // console.log("Logged Out User, ", loggedOutUser);
 
     const options = {
         httpOnly: true,
@@ -147,6 +148,6 @@ const logoutUser = asyncHandler(async (req, res) => {
     }
 
     return res.status(200).clearCookie("accessToken", options).clearCookie("refreshToken", options)
-        .json(new ApiResponse(200, "User Logged Out"));
+        .json(new ApiResponse(200,{}, "User Logged Out"));
 })
 export {registerUser, loginUser, logoutUser}
