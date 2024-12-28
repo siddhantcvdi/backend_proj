@@ -51,6 +51,10 @@ const userSchema = new Schema({
         type: 'String',
         required: [true, "Password is Required"]
     },
+    refreshToken: {
+        type: String,
+        default: ""
+    }
 },
 {
     timestamps: true
@@ -58,7 +62,7 @@ const userSchema = new Schema({
 
 /*
     .pre is executed before "saving" the password in mogoDB
-    can be used for other things by chnaging the parameters of function
+    can be used for other things by changing the parameters of function
 */
 
 userSchema.pre("save",async function(next){
